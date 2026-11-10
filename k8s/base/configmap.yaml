@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: status-dashboard-config
+  namespace: status-dashboard
+data:
+  services.json: |
+    [
+      { "name": "API Gateway",  "url": "api.example.internal:8080" },
+      { "name": "Auth Service", "url": "auth.example.internal:9000" },
+      { "name": "Database",     "url": "db.example.internal:5432" },
+      { "name": "Cache",        "url": "cache.example.internal:6379" }
+    ]

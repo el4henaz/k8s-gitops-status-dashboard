@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: status-dashboard:v1
+          image: status-dashboard:v2
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
@@ -34,3 +34,11 @@ spec:
               port: 80
             initialDelaySeconds: 2
             periodSeconds: 5
+          volumeMounts:
+            - name: config
+              mountPath: /usr/share/nginx/html/services.json
+              subPath: services.json
+      volumes:
+        - name: config
+          configMap:
+            name: status-dashboard-config
