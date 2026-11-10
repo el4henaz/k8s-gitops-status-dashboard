@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Status Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    h1 { text-align: center; margin-bottom: 0.5rem; }
+    .sub { text-align: center; color: #94a3b8; margin-bottom: 2rem; font-size: 0.9rem; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1rem;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .card {
+      background: #1e293b;
+      border-radius: 12px;
+      padding: 1.25rem;
+      border-left: 5px solid #475569;
+    }
+    .card.up { border-left-color: #22c55e; }
+    .card.down { border-left-color: #ef4444; }
+    .name { font-weight: 600; font-size: 1.1rem; }
+    .url { color: #94a3b8; font-size: 0.8rem; margin: 0.25rem 0 0.75rem; word-break: break-all; }
+    .status { font-size: 0.9rem; font-weight: 600; }
+    .up .status { color: #22c55e; }
+    .down .status { color: #ef4444; }
+  </style>
+</head>
+<body>
+  <h1>Service Status Dashboard</h1>
+  <p class="sub" id="updated">Loading...</p>
+  <div class="grid" id="grid"></div>
+
+  <script>
+    // Services are simulated for now. In step 4 they will come from a ConfigMap.
+    const services = [
+      { name: "API Gateway",  url: "api.example.internal:8080" },
+      { name: "Auth Service", url: "auth.example.internal:9000" },
+      { name: "Database",     url: "db.example.internal:5432" },
+      { name: "Cache",        url: "cache.example.internal:6379" }
+    ];
+
+    function render() {
+      const grid = document.getElementById("grid");
+      grid.innerHTML = "";
+      services.forEach(s => {
+        // Fake health check: ~85% chance of being up
+        const up = Math.random() < 0.85;
+        const card = document.createElement("div");
+        card.className = "card " + (up ? "up" : "down");
+        card.innerHTML =
+          '<div class="name">' + s.name + '</div>' +
+          '<div class="url">' + s.url + '</div>' +
+          '<div class="status">' + (up ? "UP" : "DOWN") + '</div>';
+        grid.appendChild(card);
+      });
+      document.getElementById("updated").textContent =
+        "Last check: " + new Date().toLocaleTimeString();
+    }
+
+    render();
+    setInterval(render, 5000);
+  </script>
+</body>
+</html>
